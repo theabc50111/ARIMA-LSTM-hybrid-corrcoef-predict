@@ -9,6 +9,7 @@ import pandas as pd
 import math
 import os
 import random
+import sys
 from tqdm import tqdm
 from itertools import combinations
 from sklearn.metrics import mean_squared_error, mean_absolute_error
@@ -26,6 +27,7 @@ from keras.regularizers import l1_l2
 import tensorflow.keras as keras
 import warnings
 warnings.simplefilter("ignore")
+sys.setrecursionlimit(20000)
 
 
 # # Prepare data
