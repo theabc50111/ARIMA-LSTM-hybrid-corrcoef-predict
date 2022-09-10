@@ -8,3 +8,4 @@ LSTM_ONLY/dataset/
 dataset/
 dataset.csv
 *train_logs/
+*models/
