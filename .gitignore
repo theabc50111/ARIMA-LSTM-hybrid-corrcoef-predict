@@ -1,7 +1,6 @@
 .ipynb_checkpoints/
 stock_correlation_prediction/
 correlation_record/
-results/
 lstm_only_models/
 lstm_only_scores/
 LSTM_ONLY/dataset/
