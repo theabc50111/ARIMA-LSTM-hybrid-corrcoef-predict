@@ -25,23 +25,27 @@ err_log_handler = logging.FileHandler(filename="./models/arima_train_err_log.txt
 err_logger = logging.getLogger("arima_train_err")
 err_logger.addHandler(err_log_handler)
 
+# %load_ext pycodestyle_magic
+# %pycodestyle_on --ignore E501
 
 
 # # Prepare data
 
-# In[2]:
+# ## Data implement & trainset setting
+
+# In[3]:
 
 
 # setting of output files
 save_raw_corr_data = True
 save_train_info_arima_resid_data = True
 # data implement setting
-data_implement = "sp500_20082017"  # tw50|sp500_20082017|sp500_19972007|tetuan_power
+data_implement = "sp500_20082017_consumer_discretionary"  # tw50|sp500_20082017|sp500_19972007|tetuan_power|sp500_20082017_consumer_discretionary
 # train set setting
 items_setting = "train"  # train|all
 
 
-# In[3]:
+# In[4]:
 
 
 # data loading & implement setting
@@ -53,11 +57,15 @@ elif data_implement == "sp500_19972007":
     file_name = Path("sp500_hold_19972007_adj_close_pre.csv")
     train_set = ['PXD', 'WAT', 'LH', 'AMGN', 'AOS', 'EFX', 'NEM', 'CTAS', 'MAT', 'VLO', 'APH', 'ADM', 'MLM', 'BK', 'NOV', 'BDX', 'RRC', 'IVZ', 'ED', 'SBUX', 'CI', 'ZION', 'COO', 'FDX', 'GLW', 'GPC', 'HPQ', 'ADI', 'AMG', 'MTB', 'YUM', 'SYK', 'KMX', 'AME', 'BMY', 'KMB', 'JPM', 'AET', 'DLTR', 'MGM', 'FL', 'HD', 'CLX', 'OKE', 'WMB', 'IFF', 'CMS', 'MMC', 'REG', 'ES', 'ITW', 'VRTX', 'QCOM', 'MSI', 'NKTR', 'AMAT', 'BWA', 'ESRX', 'TXT', 'VNO', 'WDC', 'PVH', 'NOC', 'PCAR', 'NSC', 'PHM', 'LUV', 'HUM', 'SPG', 'SJM', 'ABT', 'ALK', 'TAP', 'CAT', 'TMO', 'AES', 'MRK', 'RMD', 'MKC', 'HIG', 'DE', 'ATVI', 'O', 'UNM', 'VMC', 'CMA', 'RHI', 'RE', 'FMC', 'MU', 'CB', 'LNT', 'GE', 'SNA', 'LLY', 'LEN', 'MAA', 'OMC', 'F', 'APA', 'CDNS', 'SLG', 'HP', 'SHW', 'AFL', 'STT', 'PAYX', 'AIG']
 elif data_implement in ["sp500_20082017", "paper_eva_1", "paper_eva_2", "paper_eva_3", "paper_eva_4", "paper_eva_5"]:
-    file_name = Path("stock08_price.csv")
+    file_name = Path("sp500_hold_20082017_adj_close_pre.csv")
     train_set = ['CELG', 'PXD', 'WAT', 'LH', 'AMGN', 'AOS', 'EFX', 'CRM', 'NEM', 'JNPR', 'LB', 'CTAS', 'MAT', 'MDLZ', 'VLO', 'APH', 'ADM', 'MLM', 'BK', 'NOV', 'BDX', 'RRC', 'IVZ', 'ED', 'SBUX', 'GRMN', 'CI', 'ZION', 'COO', 'TIF', 'RHT', 'FDX', 'LLL', 'GLW', 'GPN', 'IPGP', 'GPC', 'HPQ', 'ADI', 'AMG', 'MTB', 'YUM', 'SYK', 'KMX', 'AME', 'AAP', 'DAL', 'A', 'MON', 'BRK', 'BMY', 'KMB', 'JPM', 'CCI', 'AET', 'DLTR', 'MGM', 'FL', 'HD', 'CLX', 'OKE', 'UPS', 'WMB', 'IFF', 'CMS', 'ARNC', 'VIAB', 'MMC', 'REG', 'ES', 'ITW', 'NDAQ', 'AIZ', 'VRTX', 'CTL', 'QCOM', 'MSI', 'NKTR', 'AMAT', 'BWA', 'ESRX', 'TXT', 'EXR', 'VNO', 'BBT', 'WDC', 'UAL', 'PVH', 'NOC', 'PCAR', 'NSC', 'UAA', 'FFIV', 'PHM', 'LUV', 'HUM', 'SPG', 'SJM', 'ABT', 'CMG', 'ALK', 'ULTA', 'TMK', 'TAP', 'SCG', 'CAT', 'TMO', 'AES', 'MRK', 'RMD', 'MKC', 'WU', 'ACN', 'HIG', 'TEL', 'DE', 'ATVI', 'O', 'UNM', 'VMC', 'ETFC', 'CMA', 'NRG', 'RHI', 'RE', 'FMC', 'MU', 'CB', 'LNT', 'GE', 'CBS', 'ALGN', 'SNA', 'LLY', 'LEN', 'MAA', 'OMC', 'F', 'APA', 'CDNS', 'SLG', 'HP', 'XLNX', 'SHW', 'AFL', 'STT', 'PAYX', 'AIG', 'FOX', 'MA']
 elif data_implement == "tetuan_power":
     file_name = Path("Tetuan City power consumption_pre.csv")
     train_set = ["Temperature", "Humidity", "Wind Speed", "general diffuse flows", "diffuse flows", "Zone 1 Power Consumption", "Zone 2 Power Consumption", "Zone 3 Power Consumption"]
+elif data_implement == "sp500_20082017_consumer_discretionary":
+    file_name = Path("sp500_hold_20082017_adj_close_pre_consumer_discretionary.csv")
+    train_set = ['LKQ', 'LEN', 'TGT', 'YUM', 'TJX', 'GRMN', 'MCD', 'DRI', 'HBI', 'GPS', 'SBUX', 'TSCO', 'WYN', 'MGM', 'MAT', 'ROST', 'IPG', 'PVH', 'VFC', 'EXPE', 'JWN', 'GPC', 'DIS', 'FL', 'AAP', 'KSS', 'TIF', 'HAS', 'DHI', 'MHK', 'UAA', 'KMX', 'BBY', 'CMCSA', 'LEG', 'VIAB', 'CCL', 'LB', 'HOG', 'F', 'AZO', 'RL', 'DISCA', 'FOXA', 'PHM', 'AMZN', 'WHR', 'NKE', 'SNA', 'M', 'FOX', 'ULTA', 'GT', 'CMG', 'LOW', 'TWX', 'HD', 'CBS']
+
 
 dataset_df = pd.read_csv(dataset_path/file_name)
 dataset_df = dataset_df.set_index('Date')
@@ -73,14 +81,15 @@ elif items_setting == "train":
     items_set = train_set
     output_set_name = "_train"
 train_info = {"tw50": {"items":items_set, "file_name": "tw50_20082017"},
-              "sp500_19972007": {"items":items_set, "file_name": f"sp500_19972007"},
-              "sp500_20082017": {"items": items_set, "file_name": f"sp500_20082017"},
-              "tetuan_power": {"items": items_set, "file_name":  f"tetuan_power"}}
+              "sp500_19972007": {"items":items_set, "output_file_name_basis": f"sp500_19972007"},
+              "sp500_20082017": {"items": items_set, "output_file_name_basis": f"sp500_20082017"},
+              "tetuan_power": {"items": items_set, "output_file_name_basis":  f"tetuan_power"},
+              "sp500_20082017_consumer_discretionary": {"items": items_set, "output_file_name_basis":  f"sp500_20082017_consumer_discretionary"}}
 items_implement = train_info[data_implement]['items']
 logging.info(f"===== len(train set): {len(items_implement)} =====")
 
 # setting of name of output files and pictures title
-output_file_name = train_info[data_implement]['file_name'] + output_set_name
+output_file_name = train_info[data_implement]['output_file_name_basis'] + output_set_name
 logging.info(f"===== file_name basis:{output_file_name} =====")
 
 # display(dataset_df)
@@ -133,6 +142,24 @@ if train_df.exists() and dev_df.exists() and test1_df.exists() and test2_df.exis
 else:
     corr_ind = list(range(99, 2400, 100))  + list(range(99+20, 2500, 100)) + list(range(99+40, 2500, 100)) + list(range(99+60, 2500, 100)) + list(range(99+80, 2500, 100))
     corr_datasets = gen_train_data(items_implement, corr_ind, save_file = save_raw_corr_data)
+
+
+# ## Decide trainset # Not always necessary to operate
+
+# In[ ]:
+
+
+# import pprint
+# import random
+
+# random.seed(10)
+
+
+# all_items = pd.read_csv(dataset_path/file_name).set_index("Date").columns.to_list()
+# train_set = random.sample(all_items, len(all_items)-10)
+# print(len(train_set))
+# pp = pprint.PrettyPrinter(width=500, compact=True)
+# pp.pprint(train_set)
 
 
 # # ARIMA model
@@ -224,7 +251,7 @@ def arima_model(dataset: "pd.DataFrame", save_file_period: str = "") -> ("pd.Dat
     return arima_output_df, arima_resid_df, arima_model_info_df
 
 
-# In[9]:
+# In[ ]:
 
 
 after_arima_data_path = dataset_path/f"{output_file_name}_after_arima"
@@ -243,7 +270,9 @@ else:
 
 # # LSTM
 
-# In[ ]:
+# ## settings of input data of LSTM
+
+# In[6]:
 
 
 # Dataset.from_tensor_slices(dict(pd.read_csv(f'./dataset/after_arima/arima_resid_train.csv')))
@@ -267,7 +296,15 @@ lstm_test2_X = lstm_test2_X.values.reshape(-1, 20, 1)
 lstm_test2_Y = lstm_test2_Y.values.reshape(-1, 1)
 
 
-# In[ ]:
+# ## settings of LSTM
+
+# In[7]:
+
+
+lstm_layer = LSTM(units=10, kernel_regularizer=l1_l2(0.2, 0.0), bias_regularizer=l1_l2(0.2, 0.0), activation="tanh", dropout=0.1)  # LSTM hyper params from 【Something Old, Something New — A Hybrid Approach with ARIMA and LSTM to Increase Portfolio Stability】
+
+
+# In[8]:
 
 
 def double_tanh(x):
@@ -276,18 +313,18 @@ def double_tanh(x):
 
 def build_many_one_lstm():
     inputs = Input(shape=(20, 1))
-    lstm_1 = LSTM(units=10, kernel_regularizer=l1_l2(0.2, 0.0), bias_regularizer=l1_l2(0.2, 0.0), activation="tanh", dropout=0.1)(inputs)
+    lstm_1 = lstm_layer(inputs)
     outputs = Dense(units=1, activation=double_tanh)(lstm_1)
     return keras.Model(inputs, outputs, name="many_one_lstm")
 
 
-opt = keras.optimizers.Adam(learning_rate=0.001)
+opt = keras.optimizers.Adam(learning_rate=0.0001)
 lstm_model = build_many_one_lstm()
 lstm_model.summary()
 lstm_model.compile(loss='mean_squared_error', optimizer=opt, metrics=['mse', 'mae'])
 
 
-# In[ ]:
+# In[10]:
 
 
 model_dir = Path('./models/')
@@ -306,7 +343,7 @@ res_df = pd.read_csv(res_csv_path)
 saved_model_list = [int(p.stem.split('_')[1]) for p in model_dir.glob('*.h5')]
 model_cbk = TensorBoard(log_dir=log_dir)
 epoch_start = max(saved_model_list) if saved_model_list else 1
-max_epoch = 300
+max_epoch = 5000
 batch_size = 64
 
 for epoch_num in tqdm(range(epoch_start, max_epoch)):
