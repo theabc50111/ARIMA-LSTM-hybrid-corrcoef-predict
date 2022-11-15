@@ -7,4 +7,5 @@ LSTM_ONLY/dataset/
 dataset/
 dataset.csv
 *train_logs/
-*models/
+save_models/
+pipeline_dataset/
