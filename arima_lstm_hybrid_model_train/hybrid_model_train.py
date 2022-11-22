@@ -91,6 +91,7 @@ output_file_name = data_cfg["DATASETS"][data_implement]['OUTPUT_FILE_NAME_BASIS'
 logging.info(f"===== file_name basis:{output_file_name} =====")
 
 
+
 # ## Load or Create Correlation Data
 
 
@@ -168,6 +169,10 @@ lstm_test2_Y = lstm_test2_Y.values.reshape(-1, 1)
 # In[ ]:
 
 
+model_log = TensorBoard(log_dir=lstm_log_dir)
+max_epoch = 300
+batch_size = 64
+
 if lstm_hyper_param == "-kS_hyper":
     lstm_layer = LSTM(units=10, kernel_regularizer=l1_l2(0.2, 0.0), bias_regularizer=l1_l2(0.2, 0.0), activation="tanh", dropout=0.1, name=f"lstm{lstm_hyper_param}")  # LSTM hyper params from 【Something Old, Something New — A Hybrid Approach with ARIMA and LSTM to Increase Portfolio Stability】
 
@@ -192,6 +197,9 @@ lstm_model.summary()
 lstm_model.compile(loss='mean_squared_error', optimizer=opt, metrics=['mse', 'mae'])
 
 
+# In[ ]:
+
+
 res_csv_path = res_dir/f'{output_file_name}{lstm_hyper_param}_lstm_evaluation.csv'
 res_csv_path.touch(exist_ok=True)
 with open(res_csv_path, 'r+') as f:
@@ -200,10 +208,7 @@ with open(res_csv_path, 'r+') as f:
 
 res_df = pd.read_csv(res_csv_path)
 saved_model_list = [int(p.stem[p.stem.find("epoch")+len("epoch"):]) for p in model_dir.glob('*.h5')]
-model_log = TensorBoard(log_dir=lstm_log_dir)
 epoch_start = max(saved_model_list) if saved_model_list else 1
-max_epoch = 300
-batch_size = 64
 
 try:
     for epoch_num in tqdm(range(epoch_start, max_epoch)):
@@ -211,7 +216,7 @@ try:
             lstm_model = load_model(model_dir/f"{output_file_name}{lstm_hyper_param}-epoch{epoch_num - 1}.h5", custom_objects={'double_tanh':double_tanh})
 
         save_model = ModelCheckpoint(model_dir/f"{output_file_name}{lstm_hyper_param}-epoch{epoch_num}.h5",
-                                                     monitor='loss', verbose=1, mode='min', save_best_only=False)
+                                     monitor='loss', verbose=1, mode='min', save_best_only=False)
         lstm_model.fit(lstm_train_X, lstm_train_Y, epochs=1, batch_size=batch_size, shuffle=True, callbacks=[model_log, save_model], verbose=0)
 
         # test the model
@@ -243,6 +248,9 @@ else:
     pass
 finally:
     res_df.to_csv(res_csv_path, index=False)
+
+
+# In[ ]:
 
 
 
