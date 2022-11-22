@@ -62,7 +62,7 @@ res_dir.mkdir(parents=True, exist_ok=True)
 save_corr_data = True
 save_arima_resid_data = True
 # data implement setting
-data_implement = "SP500_20082017_FREQ_CLUSTER_TEST"  # watch options by operate: print(data_cfg["DATASETS"].keys())
+data_implement = "SP500_20082017"  # watch options by operate: print(data_cfg["DATASETS"].keys())
 # train set setting
 train_items_setting = "-train_train"  # -train_train|-train_all
 # data split  period setting, only suit for only settings of Korean paper
@@ -200,9 +200,9 @@ with open(res_csv_path, 'r+') as f:
 
 res_df = pd.read_csv(res_csv_path)
 saved_model_list = [int(p.stem[p.stem.find("epoch")+len("epoch"):]) for p in model_dir.glob('*.h5')]
-model_cbk = TensorBoard(log_dir=lstm_log_dir)
+model_log = TensorBoard(log_dir=lstm_log_dir)
 epoch_start = max(saved_model_list) if saved_model_list else 1
-max_epoch = 5000
+max_epoch = 300
 batch_size = 64
 
 try:
@@ -212,7 +212,7 @@ try:
 
         save_model = ModelCheckpoint(model_dir/f"{output_file_name}{lstm_hyper_param}-epoch{epoch_num}.h5",
                                                      monitor='loss', verbose=1, mode='min', save_best_only=False)
-        lstm_model.fit(lstm_train_X, lstm_train_Y, epochs=1, batch_size=batch_size, shuffle=True, callbacks=[model_cbk, save_model], verbose=0)
+        lstm_model.fit(lstm_train_X, lstm_train_Y, epochs=1, batch_size=batch_size, shuffle=True, callbacks=[model_log, save_model], verbose=0)
 
         # test the model
         score_train = lstm_model.evaluate(lstm_train_X, lstm_train_Y)

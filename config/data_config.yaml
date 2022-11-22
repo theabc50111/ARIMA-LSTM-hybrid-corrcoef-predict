@@ -38,7 +38,7 @@ DATASETS:
         TRAIN_SET: ['AOS', 'AAPL', 'GOOGL', 'CMCSA', 'IPG', 'KMX', 'RE', 'L', 'ADP', 'CDNS', 'COST', 'LOW', 'TMK', 'AMAT', 'MHK', 'SNA', 'MTD', 'MMC', 'HD', 'WDC', 'DHR', 'SHW', 'WU', 'ICE', 'BLK', 'BA', 'SYK', 'DIS', 'TROW', 'AMG', 'LRCX', 'SWK', 'MSCI', 'AME', 'AFL', 'HIG', 'GLW', 'NDAQ', 'ROP', 'AVY', 'IVZ', 'AON', 'CSCO', 'XL', 'A', 'INTU', 'NVDA', 'FISV', 'GD', 'MAS', 'IR', 'NWL', 'MSFT', 'MU', 'NTAP', 'HSIC', 'CME', 'BEN', 'CA', 'IT', 'EFX', 'KLAC', 'EBAY', 'PAYX', 'AMP', 'INTC']
         OUTPUT_FILE_NAME_BASIS: "sp500_20082017_freq_cluster_label_1"
     SP500_20082017_FREQ_CLUSTER_TEST:
-        FILE_PATH: "{DIRS.DATASET_DIR}/sp500_hold_20082017-adj_close-frequent_cluster_test-pre.csv"
+        FILE_PATH: "{DIRS.DATASET_DIR}/sp500_hold_20082017-adj_close-frequent_cluster_test-pre.csv"  # Note: 2022/11/20 before calculate mean of corr_series, abs(corr_series) first
         TRAIN_SET: ['EMN', 'SNA', 'TSS', 'MTB', 'JPM', 'TXT', 'USB', 'BLL', 'ROP', 'NTRS', 'PBCT', 'PAYX', 'SCHW', 'HON', 'COL', 'RF', 'ADP', 'NTAP', 'CBS', 'UTX', 'ORCL', 'ITW', 'DGX', 'CME', 'MTD', 'GT', 'PNR', 'UNM', 'AON', 'MSFT', 'BLK', 'IBM', 'ABC', 'NSC', 'AMG', 'ETFC', 'C', 'ADSK', 'KMX', 'KLAC', 'HBAN', 'WU', 'KSU', 'MS', 'MA', 'AFL', 'SIVB', 'INTU', 'TSCO', 'HSIC', 'OMC', 'VLO', 'BBT', 'SWK', 'IPG', 'STI', 'STT', 'REGN', 'TMO', 'MCHP', 'DVA', 'GD', 'HBI', 'CMA', 'UNP', 'SNPS', 'AMP', 'PKI', 'NOC', 'FISV', 'CTSH', 'VIAB', 'MRK', 'FIS', 'AOS', 'KEY', 'GLW', 'APD', 'SP500', 'WAT', 'GS', 'MET', 'FITB', 'RTN', 'PNC', 'ESRX', 'DFS', 'APH', 'A', 'AJG', 'MAR', 'XLNX', 'MSCI', 'BK', 'BSX', 'MMC', 'AIG', 'DISH', 'CA', 'AMD', 'BDX', 'HIG', 'DIS', 'CTAS', 'LKQ', 'IT', 'EL', 'PFG', 'STX', 'BAC', 'AVY', 'MCK', 'WYN', 'PRU', 'ADS', 'TEL', 'LH', 'CERN', 'IDXX', 'MU', 'TXN', 'MYL', 'HRS', 'ZION', 'BA', 'CNC', 'UPS', 'AME', 'AYI', 'COF', 'ACN', 'LRCX', 'AMAT', 'CDNS', 'NDAQ', 'AXP', 'PX', 'ICE', 'MCO', 'GPN', 'MDT', 'FDX', 'LLL', 'TROW', 'FMC', 'JCI', 'ADI', 'CSX', 'MSI', 'WDC']
         OUTPUT_FILE_NAME_BASIS: "sp500_20082017_freq_cluster_test"
     SP500_20082017_RANDOM_66:
@@ -93,6 +93,9 @@ LSTM_WEIGHT:
     SP500_20082017_TEST_5000_EPOCH_KS_HYPER_LSTM:
         FILE_PATH: "{DIRS.ARIMA_LSTM_WEIGHT_DIR}/20221119/sp500_20082017-train_train-kS_hyper-epoch1188.h5"
         LSTM_WEIGHT_NAME: "-sp500_20082017_5000_epoch_kS_hyper_lstm"
+    SP500_20082017_TEST_300_EPOCH_KS_HYPER_LSTM:
+        FILE_PATH: "{DIRS.ARIMA_LSTM_WEIGHT_DIR}/20221122/sp500_20082017-train_train-kS_hyper-epoch299.h5"
+        LSTM_WEIGHT_NAME: "-sp500_20082017_300_epoch_kS_hyper_lstm"
     TW50_LSTM:
         FILE_PATH: "{DIRS.ARIMA_LSTM_WEIGHT_DIR}/20220816/tw50_20082017-epoch246.h5"
         LSTM_WEIGHT_NAME: "-tw50_20082017lstm"
@@ -105,3 +108,6 @@ LSTM_WEIGHT:
     SP500_20082017_FREQ_CLUSTER_LABEL_1_KS_HYPER_LSTM:
         FILE_PATH: "{DIRS.ARIMA_LSTM_WEIGHT_DIR}/20221115/sp500_20082017_freq_cluster_label_1-train_train-kS_hyper-epoch1590.h5"
         LSTM_WEIGHT_NAME: "-sp500_20082017_freq_cluster_label_1_kS_hyper_lstm"
+    SP500_20082017_FREQ_CLUSTER_LABEL_TEST_KS_HYPER_LSTM:
+        FILE_PATH: "{DIRS.ARIMA_LSTM_WEIGHT_DIR}/20221121/sp500_20082017_freq_cluster_test-train_train-kS_hyper-epoch2255.h5"
+        LSTM_WEIGHT_NAME: "-sp500_20082017_freq_cluster_label_test_kS_hyper_lstm"
