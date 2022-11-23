@@ -101,6 +101,9 @@ LSTM_WEIGHT:
     SP500_20082017_TEST_5000_EPOCH_KS_HYPER_LSTM:  # Except max epoch number, it's almost same as SP500_20082017_KS_HYPER_LSTM
         FILE_PATH: "{DIRS.ARIMA_LSTM_WEIGHT_DIR}/20221119/sp500_20082017-train_train-kS_hyper-epoch1188.h5"
         LSTM_WEIGHT_NAME: "-sp500_20082017_5000_epoch_kS_hyper_lstm"
+    SP500_20082017_TEST_1000_EPOCH_KS_HYPER_LSTM:  # Except max epoch number, it's almost same as SP500_20082017_KS_HYPER_LSTM
+        FILE_PATH: "{DIRS.ARIMA_LSTM_WEIGHT_DIR}/20221123/sp500_20082017-train_train-kS_hyper-max_epoch1000/sp500_20082017-train_train-kS_hyper-epoch426.h5"
+        LSTM_WEIGHT_NAME: "-sp500_20082017_1000_epoch_kS_hyper_lstm"
     SP500_20082017_TEST_300_EPOCH_KS_HYPER_LSTM:  # Except max epoch number, it's almost same as SP500_20082017_KS_HYPER_LSTM
         FILE_PATH: "{DIRS.ARIMA_LSTM_WEIGHT_DIR}/20221122/sp500_20082017-train_train-kS_hyper-epoch291.h5"
         LSTM_WEIGHT_NAME: "-sp500_20082017_300_epoch_kS_hyper_lstm"
