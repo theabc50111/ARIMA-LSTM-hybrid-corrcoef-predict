@@ -170,7 +170,7 @@ lstm_test2_Y = lstm_test2_Y.values.reshape(-1, 1)
 
 
 model_log = TensorBoard(log_dir=lstm_log_dir)
-max_epoch = 300
+max_epoch = 1000
 batch_size = 64
 
 if lstm_hyper_param == "-kS_hyper":
