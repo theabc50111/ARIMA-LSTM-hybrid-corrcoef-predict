@@ -9,3 +9,4 @@ dataset.csv
 *train_logs/
 save_models/
 pipeline_dataset/
+*__pycache__/
