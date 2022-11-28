@@ -41,7 +41,7 @@ logging.basicConfig(level=logging.INFO)
 
 # %load_ext pycodestyle_magic
 # %pycodestyle_on --ignore E501
-logging.info(pformat(data_cfg, indent=1, width=100, compact=True))
+logging.debug(pformat(data_cfg, indent=1, width=100, compact=True))
 
 
 # # Prepare data
@@ -51,18 +51,11 @@ logging.info(pformat(data_cfg, indent=1, width=100, compact=True))
 # In[ ]:
 
 
-model_dir = Path('./save_models/')
-lstm_log_dir = Path('./save_models/lstm_train_logs/')
-res_dir = Path('./results/')
-model_dir.mkdir(parents=True, exist_ok=True)
-lstm_log_dir.mkdir(parents=True, exist_ok=True)
-res_dir.mkdir(parents=True, exist_ok=True)
-
 # setting of output files
 save_corr_data = True
 save_arima_resid_data = True
 # data implement setting
-data_implement = "SP500_20082017_CORR_SER_ABS_CORR_MAT_HRCHY_11_CLUSTER"  # watch options by operate: print(data_cfg["DATASETS"].keys())
+data_implement = "SP500_20082017_CORR_SER_ABS_HRCHY_12_CLUSTER"  # watch options by operate: print(data_cfg["DATASETS"].keys())
 # train set setting
 train_items_setting = "-train_train"  # -train_train|-train_all
 # data split  period setting, only suit for only settings of Korean paper
@@ -89,14 +82,26 @@ logging.info(f"===== len(train set): {len(items_implement)} =====")
 # setting of name of output files and pictures title
 output_file_name = data_cfg["DATASETS"][data_implement]['OUTPUT_FILE_NAME_BASIS'] + train_items_setting
 logging.info(f"===== file_name basis:{output_file_name} =====")
+# display(dataset_df)
 
+# output folder settings
+corr_data_dir = Path(data_cfg["DIRS"]["PIPELINE_DATA_DIR"])/f"{output_file_name}-corr_data"
+arima_result_dir = Path(data_cfg["DIRS"]["PIPELINE_DATA_DIR"])/f"{output_file_name}-arima_res"
+model_dir = Path('./save_models/')
+lstm_log_dir = Path('./save_models/lstm_train_logs/')
+res_dir = Path('./results/')
+corr_data_dir.mkdir(parents=True, exist_ok=True)
+arima_result_dir.mkdir(parents=True, exist_ok=True)
+model_dir.mkdir(parents=True, exist_ok=True)
+lstm_log_dir.mkdir(parents=True, exist_ok=True)
+res_dir.mkdir(parents=True, exist_ok=True)
 
 
 # ## Load or Create Correlation Data
 
+# In[ ]:
 
-corr_data_dir = Path(data_cfg["DIRS"]["PIPELINE_DATA_DIR"])/f"{output_file_name}-corr_data"
-corr_data_dir.mkdir(parents=True, exist_ok=True)
+
 data_length = int(len(dataset_df)/data_gen_cfg["CORR_WINDOW"])*data_gen_cfg["CORR_WINDOW"]
 corr_ser_len_max = int((data_length-data_gen_cfg["CORR_WINDOW"])/data_gen_cfg["CORR_STRIDE"])
 
@@ -117,8 +122,6 @@ else:
 # In[ ]:
 
 
-arima_result_dir = Path(data_cfg["DIRS"]["PIPELINE_DATA_DIR"])/f"{output_file_name}-arima_res"
-arima_result_dir.mkdir(parents=True, exist_ok=True)
 arima_result_path_basis = arima_result_dir/f'{output_file_name}.csv'
 arima_result_paths = []
 arima_result_types = ["-arima_model_info", "-arima_output", "-arima_resid"]
@@ -144,7 +147,6 @@ else:
 
 
 # Dataset.from_tensor_slices(dict(pd.read_csv(f'./dataset/after_arima/arima_resid_train.csv')))
-arima_result_dir = Path(data_cfg["DIRS"]["PIPELINE_DATA_DIR"])/f"{output_file_name}-arima_res"
 lstm_train_X = pd.read_csv(arima_result_dir/f'{output_file_name}-arima_resid-data_sp_train.csv', index_col="items").iloc[::, :-1]
 lstm_train_Y = pd.read_csv(arima_result_dir/f'{output_file_name}-arima_resid-data_sp_train.csv', index_col="items").iloc[::, -1]
 lstm_dev_X = pd.read_csv(arima_result_dir/f'{output_file_name}-arima_resid-data_sp_dev.csv', index_col="items").iloc[::, :-1]
@@ -154,14 +156,16 @@ lstm_test1_Y = pd.read_csv(arima_result_dir/f'{output_file_name}-arima_resid-dat
 lstm_test2_X = pd.read_csv(arima_result_dir/f'{output_file_name}-arima_resid-data_sp_test2.csv', index_col="items").iloc[::, :-1]
 lstm_test2_Y = pd.read_csv(arima_result_dir/f'{output_file_name}-arima_resid-data_sp_test2.csv', index_col="items").iloc[::, -1]
 
-lstm_train_X = lstm_train_X.values.reshape(-1, 20, 1)
-lstm_train_Y = lstm_train_Y.values.reshape(-1, 1)
-lstm_dev_X = lstm_dev_X.values.reshape(-1, 20, 1)
-lstm_dev_Y = lstm_dev_Y.values.reshape(-1, 1)
-lstm_test1_X = lstm_test1_X.values.reshape(-1, 20, 1)
-lstm_test1_Y = lstm_test1_Y.values.reshape(-1, 1)
-lstm_test2_X = lstm_test2_X.values.reshape(-1, 20, 1)
-lstm_test2_Y = lstm_test2_Y.values.reshape(-1, 1)
+lstm_X_len = lstm_train_X.shape[1]
+lstm_Y_len = lstm_train_Y.shape[1] if len(lstm_train_Y.shape)>1 else 1
+lstm_train_X = lstm_train_X.values.reshape(-1, lstm_X_len, 1)
+lstm_train_Y = lstm_train_Y.values.reshape(-1, lstm_Y_len)
+lstm_dev_X = lstm_dev_X.values.reshape(-1, lstm_X_len, 1)
+lstm_dev_Y = lstm_dev_Y.values.reshape(-1, lstm_Y_len)
+lstm_test1_X = lstm_test1_X.values.reshape(-1,  lstm_X_len, 1)
+lstm_test1_Y = lstm_test1_Y.values.reshape(-1, lstm_Y_len)
+lstm_test2_X = lstm_test2_X.values.reshape(-1,  lstm_X_len, 1)
+lstm_test2_Y = lstm_test2_Y.values.reshape(-1, lstm_Y_len)
 
 
 # ## settings of LSTM
@@ -172,6 +176,7 @@ lstm_test2_Y = lstm_test2_Y.values.reshape(-1, 1)
 model_log = TensorBoard(log_dir=lstm_log_dir)
 max_epoch = 5000
 batch_size = 64
+lstm_metrics = ['mse', 'mae']
 
 if lstm_hyper_param == "-kS_hyper":
     lstm_layer = LSTM(units=10, kernel_regularizer=l1_l2(0.2, 0.0), bias_regularizer=l1_l2(0.2, 0.0), activation="tanh", dropout=0.1, name=f"lstm{lstm_hyper_param}")  # LSTM hyper params from 【Something Old, Something New — A Hybrid Approach with ARIMA and LSTM to Increase Portfolio Stability】
@@ -194,7 +199,7 @@ def build_many_one_lstm():
 opt = keras.optimizers.Adam(learning_rate=0.0001)
 lstm_model = build_many_one_lstm()
 lstm_model.summary()
-lstm_model.compile(loss='mean_squared_error', optimizer=opt, metrics=['mse', 'mae'])
+lstm_model.compile(loss='mean_squared_error', optimizer=opt, metrics=lstm_metrics)
 
 
 # In[ ]:
@@ -217,20 +222,22 @@ try:
 
         save_model = ModelCheckpoint(model_dir/f"{output_file_name}{lstm_hyper_param}-epoch{epoch_num}.h5",
                                      monitor='loss', verbose=1, mode='min', save_best_only=False)
-        lstm_model.fit(lstm_train_X, lstm_train_Y, epochs=1, batch_size=batch_size, shuffle=True, callbacks=[model_log, save_model], verbose=0)
+        lstm_model.fit(lstm_train_X, lstm_train_Y, epochs=1, batch_size=batch_size, callbacks=[model_log, save_model], shuffle=True, verbose=0)
 
         # test the model
         score_train = lstm_model.evaluate(lstm_train_X, lstm_train_Y)
         score_dev = lstm_model.evaluate(lstm_dev_X, lstm_dev_Y)
         score_test1 = lstm_model.evaluate(lstm_test1_X, lstm_test1_Y)
         score_test2 = lstm_model.evaluate(lstm_test2_X, lstm_test2_Y)
-        res_each_epoch_df = pd.DataFrame(np.array([epoch_num, score_train[0], score_dev[0],
-                                                   score_test1[0], score_test2[0],
-                                                   score_train[1], score_dev[1],
-                                                   score_test1[1], score_test2[1]]).reshape(-1, 9),
-                                        columns=["epoch", "TRAIN_MSE", "DEV_MSE", "TEST1_MSE",
-                                                 "TEST2_MSE", "TRAIN_MAE", "DEV_MAE",
-                                                 "TEST1_MAE", "TEST2_MAE"])
+        metrics_mse_ind = lstm_metrics.index('mse') + 1  # need to plus one, because first term of lstm_model.evaluate() is loss
+        metrics_mae_ind = lstm_metrics.index('mae') + 1  # need to plus one, because first term of lstm_model.evaluate() is loss
+        res_each_epoch_df = pd.DataFrame(np.array([epoch_num, score_train[metrics_mse_ind], score_dev[metrics_mse_ind],
+                                                   score_test1[metrics_mse_ind], score_test2[metrics_mse_ind],
+                                                   score_train[metrics_mae_ind], score_dev[metrics_mae_ind],
+                                                   score_test1[metrics_mae_ind], score_test2[metrics_mae_ind]]).reshape(-1, 9),
+                                         columns=["epoch", "TRAIN_MSE", "DEV_MSE", "TEST1_MSE",
+                                                  "TEST2_MSE", "TRAIN_MAE", "DEV_MAE",
+                                                  "TEST1_MAE", "TEST2_MAE"])
         res_df = pd.concat([res_df, res_each_epoch_df])
         if (res_df.shape[0] % 100) == 0:
             res_df.to_csv(res_csv_path, index=False)  # insurance for 『finally』 part doesent'work
@@ -248,10 +255,3 @@ else:
     pass
 finally:
     res_df.to_csv(res_csv_path, index=False)
-
-
-# In[ ]:
-
-
-
-
