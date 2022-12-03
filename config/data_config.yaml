@@ -104,10 +104,12 @@ ARIMA_LSTM_LSTM_WEIGHT:
         FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221118/sp500_20082017_random_66-train_train-kS_hyper-epoch4097.h5"
         LSTM_WEIGHT_NAME: "-sp500_20082017_rand_66_kS_hyper_lstm"
     SP500_20082017_TEST_5000_EPOCH_KS_HYPER_LSTM:  # Except max epoch number, it's almost same as SP500_20082017_KS_HYPER_LSTM
-        FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221119/sp500_20082017-train_train-kS_hyper-epoch1188.h5"
+        # FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221119/sp500_20082017-train_train-kS_hyper-epoch1188.h5"
+        FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221130/sp500_20082017-train_train-kS_hyper-epoch2999.h5"
         LSTM_WEIGHT_NAME: "-sp500_20082017_5000_epoch_kS_hyper_lstm"
     SP500_20082017_TEST_1000_EPOCH_KS_HYPER_LSTM:  # Except max epoch number, it's almost same as SP500_20082017_KS_HYPER_LSTM
-        FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221123/sp500_20082017-train_train-kS_hyper-max_epoch1000/sp500_20082017-train_train-kS_hyper-epoch426.h5"
+        # FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221123/sp500_20082017-train_train-kS_hyper-max_epoch1000/sp500_20082017-train_train-kS_hyper-epoch426.h5"
+        FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221130/sp500_20082017-train_train-kS_hyper-epoch711.h5"
         LSTM_WEIGHT_NAME: "-sp500_20082017_1000_epoch_kS_hyper_lstm"
     SP500_20082017_TEST_300_EPOCH_KS_HYPER_LSTM:  # Except max epoch number, it's almost same as SP500_20082017_KS_HYPER_LSTM
         FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221122/sp500_20082017-train_train-kS_hyper-epoch291.h5"
@@ -130,7 +132,7 @@ ARIMA_LSTM_LSTM_WEIGHT:
     SP500_20082017_CORR_SER_ABS_HRCHY_12_CLUSTER_KS_HYPER_LSTM:
         # FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221126/sp500_20082017_corr_ser_abs_hrchy_12_cluster-train_train-kS_hyper-epoch1655.h5"
         # FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221121/sp500_20082017_freq_cluster_test-train_train-kS_hyper-epoch2255.h5"  # same hyper-params of clustering & same clustering results, but this lstm weight performs better
-        FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221129/sp500_20082017_corr_ser_abs_hrchy_12_cluster-train_train-kS_hyper-epoch4981.h5"  # same hyper-params of clustering & same clustering results, but this lstm weight performs better
+        FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221129/sp500_20082017_corr_ser_abs_hrchy_12_cluster-train_train-kS_hyper-epoch4981.h5"  # same hyper-params of clustering & same clustering results
         LSTM_WEIGHT_NAME: "-sp500_20082017_corr_ser_abs_hrchy_12_cluster_kS_hyper_lstm"
     SP500_20082017_CORR_SER_ABS_CORR_MAT_HRCHY_11_CLUSTER_KS_HYPER_LSTM:
         FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221126/sp500_20082017_corr_ser_abs_corr_mat_hrchy_11_cluster-train_train-kS_hyper-epoch2967.h5"
