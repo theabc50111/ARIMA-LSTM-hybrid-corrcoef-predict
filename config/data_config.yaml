@@ -5,7 +5,9 @@ DIRS:
     DATASET_DIR: "/tf/correlation-coef-predict/dataset"
     ARIMA_LSTM_LSTM_WEIGHT_DIR: "/tf/correlation-coef-predict/models/arima_lstm-lstm_weight"
     LSTM_LSTM_LSTM_WEIGHT_DIR: "/tf/correlation-coef-predict/models/lstm_lstm-first_and_second_stage_lstm_weight"
+    LSTM_ONLY_LSTM_WEIGHT_DIR: "/tf/correlation-coef-predict/models/lstm_only_lstm_weight"
     PIPELINE_DATA_DIR: "/tf/correlation-coef-predict/pipeline_dataset"
+   
     
 
 # loading & implement setting
@@ -89,6 +91,7 @@ DATASETS:
         TEST_SET: ['RL', 'CVX', 'SRE', 'PFE', 'PCG', 'UTX', 'NTRS', 'INCY', 'COP', 'HRL']
         OUTPUT_FILE_NAME_BASIS: "test_case"
 
+
 # arima_lstm  lstm weight setting
 ARIMA_LSTM_LSTM_WEIGHT:
     SP500_20082017_LSTM:
@@ -140,6 +143,8 @@ ARIMA_LSTM_LSTM_WEIGHT:
     # SP500_20082017_FREQ_CLUSTER_LABEL_TEST_KS_HYPER_LSTM:
     #     FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221121/sp500_20082017_freq_cluster_test-train_train-kS_hyper-epoch2255.h5"
     #     LSTM_WEIGHT_NAME: "-sp500_20082017_freq_cluster_label_test_kS_hyper_lstm"
+
+
 # lstm_lstm  lstm weight setting
 LSTM_LSTM_LSTM_WEIGHT:
     FIRST_STAGE_LSTM:
@@ -150,4 +155,15 @@ LSTM_LSTM_LSTM_WEIGHT:
         SP500_20082017_KS_HYPER_SECOND_STAGE_LSTM:
             FILE_PATH: "{DIRS.LSTM_LSTM_LSTM_WEIGHT_DIR}/second_stage_lstm_weight/20221129/sp500_20082017-train_train-kS_hyper-epoch1140.h5"
             LSTM_WEIGHT_NAME: "-sp500_20082017_kS_hyper_second_stage_lstm"
-            
+
+
+# lstm_only  lstm weight setting
+LSTM_ONLY_LSTM_WEIGHT:
+    FIRST_STAGE_LSTM:
+        SP500_20082017_KS_HYPER_FIRST_STAGE_LSTM:
+            FILE_PATH: "{DIRS.LSTM_ONLY_LSTM_WEIGHT_DIR}/"
+            LSTM_WEIGHT_NAME: "-sp500_20082017_kS_hyper_first_stage_lstm_only"
+    SECOND_STAGE_LSTM:
+        SP500_20082017_KS_HYPER_SECOND_STAGE_LSTM:
+            FILE_PATH: "{DIRS.LSTM_ONLY_LSTM_WEIGHT_DIR}/20221101/lstm_only_second_stage/sp500_20082017_train_LSTM_only_epoch_382.h5"
+            LSTM_WEIGHT_NAME: "-sp500_20082017_kS_hyper_second_stage_lstm_only"
