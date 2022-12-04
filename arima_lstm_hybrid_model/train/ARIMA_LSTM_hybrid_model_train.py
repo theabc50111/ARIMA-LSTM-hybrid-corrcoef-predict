@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[1]:
 
 
 from tqdm import tqdm
@@ -31,7 +31,7 @@ import data_generation
 from data_generation import data_gen_cfg
 from ywt_arima import arima_model, arima_err_logger_init
 
-with open('../config/data_config.yaml') as f:
+with open('../../config/data_config.yaml') as f:
     data = dynamic_yaml.load(f)
     data_cfg = yaml.full_load(dynamic_yaml.dump(data))
 
@@ -48,7 +48,7 @@ logging.debug(pformat(data_cfg, indent=1, width=100, compact=True))
 
 # ## Data implement & output setting & trainset setting
 
-# In[ ]:
+# In[2]:
 
 
 # setting of output files
@@ -59,12 +59,12 @@ data_implement = "SP500_20082017"  # watch options by operate: print(data_cfg["D
 # train set setting
 train_items_setting = "-train_train"  # -train_train|-train_all
 # data split  period setting, only suit for only settings of Korean paper
-data_split_settings = ["-data_sp_train", "-data_sp_dev", "-data_sp_test1", "-data_sp_test2"]
+data_split_settings = ["-data_sp_train", "-data_sp_dev", "-data_sp_test1", "-data_sp_test2", ]
 # lstm_hyper_params
 lstm_hyper_param = "-kS_hyper"
 
 
-# In[ ]:
+# In[3]:
 
 
 # data loading & implement setting
@@ -99,7 +99,7 @@ res_dir.mkdir(parents=True, exist_ok=True)
 
 # ## Load or Create Correlation Data
 
-# In[ ]:
+# In[4]:
 
 
 data_length = int(len(dataset_df)/data_gen_cfg["CORR_WINDOW"])*data_gen_cfg["CORR_WINDOW"]
@@ -119,7 +119,7 @@ else:
 
 # # ARIMA model
 
-# In[ ]:
+# In[5]:
 
 
 arima_result_path_basis = arima_result_dir/f'{output_file_name}.csv'
@@ -143,7 +143,7 @@ else:
 
 # ## settings of input data of LSTM
 
-# In[ ]:
+# In[6]:
 
 
 # Dataset.from_tensor_slices(dict(pd.read_csv(f'./dataset/after_arima/arima_resid_train.csv')))
@@ -170,11 +170,11 @@ lstm_test2_Y = lstm_test2_Y.values.reshape(-1, lstm_Y_len)
 
 # ## settings of LSTM
 
-# In[ ]:
+# In[7]:
 
 
 model_log = TensorBoard(log_dir=lstm_log_dir)
-max_epoch = 5000
+max_epoch = 300
 batch_size = 64
 lstm_metrics = ['mse', 'mae']
 
@@ -182,7 +182,7 @@ if lstm_hyper_param == "-kS_hyper":
     lstm_layer = LSTM(units=10, kernel_regularizer=l1_l2(0.2, 0.0), bias_regularizer=l1_l2(0.2, 0.0), activation="tanh", dropout=0.1, name=f"lstm{lstm_hyper_param}")  # LSTM hyper params from 【Something Old, Something New — A Hybrid Approach with ARIMA and LSTM to Increase Portfolio Stability】
 
 
-# In[ ]:
+# In[8]:
 
 
 def double_tanh(x):
@@ -255,3 +255,4 @@ else:
     pass
 finally:
     res_df.to_csv(res_csv_path, index=False)
+
