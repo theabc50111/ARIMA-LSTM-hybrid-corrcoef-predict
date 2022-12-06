@@ -55,7 +55,7 @@ logging.debug(pformat(data_cfg, indent=1, width=100, compact=True))
 save_corr_data = True
 save_arima_resid_data = True
 # data implement setting
-data_implement = "SP500_20082017"  # watch options by operate: print(data_cfg["DATASETS"].keys())
+data_implement = "SP500_20082017_CORR_SER_REG_CORR_MAT_HRCHY_11_CLUSTER"  # watch options by operate: print(data_cfg["DATASETS"].keys())
 # train set setting
 train_items_setting = "-train_train"  # -train_train|-train_all
 # data split  period setting, only suit for only settings of Korean paper
@@ -174,7 +174,7 @@ lstm_test2_Y = lstm_test2_Y.values.reshape(-1, lstm_Y_len)
 
 
 model_log = TensorBoard(log_dir=lstm_log_dir)
-max_epoch = 300
+max_epoch = 10000
 batch_size = 64
 lstm_metrics = ['mse', 'mae']
 
