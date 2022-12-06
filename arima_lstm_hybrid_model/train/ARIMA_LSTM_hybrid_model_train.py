@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#
+/usr/bin/env python
 # coding: utf-8
 
 # In[1]:
@@ -55,7 +56,7 @@ logging.debug(pformat(data_cfg, indent=1, width=100, compact=True))
 save_corr_data = True
 save_arima_resid_data = True
 # data implement setting
-data_implement = "SP500_20082017_CORR_SER_REG_HRCHY_10_CLUSTER"  # watch options by operate: print(data_cfg["DATASETS"].keys())
+data_implement = "SP500_20082017_CORR_SER_REG_CORR_MAT_HRCHY_11_CLUSTER"  # watch options by operate: print(data_cfg["DATASETS"].keys())
 # train set setting
 train_items_setting = "-train_train"  # -train_train|-train_all
 # data split  period setting, only suit for only settings of Korean paper
