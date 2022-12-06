@@ -62,8 +62,8 @@ logging.debug(pformat(data_cfg, indent=1, width=100, compact=True))
 # ## Data implement & output setting & testset setting
 
 
-test_datasets = ['PAPER_EVA_1', 'PAPER_EVA_2', 'PAPER_EVA_3', 'PAPER_EVA_4', 'PAPER_EVA_5']
-test_lstm_weights = ['SP500_20082017_KS_HYPER_LSTM', 'SP500_20082017_TEST_5000_EPOCH_KS_HYPER_LSTM', 'SP500_20082017_TEST_1000_EPOCH_KS_HYPER_LSTM', 'SP500_20082017_TEST_300_EPOCH_KS_HYPER_LSTM']
+test_datasets = ['SP500_20082017_FREQ_CLUSTER_LABEL_1']
+test_lstm_weights = ['SP500_20082017_RAND_66_KS_HYPER_LSTM', 'SP500_20082017_FREQ_CLUSTER_LABEL_1_KS_HYPER_LSTM']
 
 for data_imp, lstm_weight_set in product(test_datasets, test_lstm_weights):
     # setting of output files
@@ -259,7 +259,8 @@ for data_imp, lstm_weight_set in product(test_datasets, test_lstm_weights):
                      sklearn mse: {mean_squared_error(res_df['ground_truth'], res_df['hybrid_model_pred'])}
                   """)
     logging.info("-"*50)
-    logging.info(f"""mse of ARIMA :{(res_df['arima_err']**2).mean()},
+    logging.info(f"""
+                     mse of ARIMA :{(res_df['arima_err']**2).mean()},
                      std of square_err ARIMA :{(res_df['arima_err']**2).std()},
                      rmse of ARIMA :{np.sqrt((res_df['arima_err']**2).mean())},
                      sklearn mse of ARIMA: {mean_squared_error(res_df['ground_truth'], res_df['arima_pred'])}
