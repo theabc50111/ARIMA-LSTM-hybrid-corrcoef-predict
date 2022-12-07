@@ -133,7 +133,8 @@ ARIMA_LSTM_LSTM_WEIGHT:
         FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221024/sp500_20082017_consumDiscretionary-kSenneset_hyperParams_lstm/sp500_20082017_consumDiscretionary-train-epoch832.h5"
         LSTM_WEIGHT_NAME: "-sp500_20082017_consumDiscretionary_kS_hyper_lstm"
     SP500_20082017_FREQ_CLUSTER_LABEL_1_KS_HYPER_LSTM:
-        FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221115/sp500_20082017_freq_cluster_label_1-train_train-kS_hyper-epoch1590.h5"
+        # FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221115/sp500_20082017_freq_cluster_label_1-train_train-kS_hyper-epoch1590.h5"
+        FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221207/sp500_20082017_freq_cluster_label_1-train_train-kS_hyper-epoch9189.h5"
         LSTM_WEIGHT_NAME: "-sp500_20082017_freq_cluster_label_1_kS_hyper_lstm"
     SP500_20082017_CORR_SER_REG_HRCHY_10_CLUSTER_KS_HYPER_LSTM:
         # FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221124/sp500_20082017_corr_ser_reg_hrchy_10_cluster-train_train-kS_hyper-epoch1274.h5"
