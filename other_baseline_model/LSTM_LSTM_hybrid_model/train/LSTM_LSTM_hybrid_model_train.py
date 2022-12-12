@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[ ]:
 
 
 from tqdm import tqdm
@@ -31,7 +31,7 @@ import data_generation
 from data_generation import data_gen_cfg
 from ywt_arima import arima_model, arima_err_logger_init
 
-with open('../config/data_config.yaml') as f:
+with open('../../../config/data_config.yaml') as f:
     data = dynamic_yaml.load(f)
     data_cfg = yaml.full_load(dynamic_yaml.dump(data))
 
@@ -48,7 +48,7 @@ logging.debug(pformat(data_cfg, indent=1, width=100, compact=True))
 
 # ## Data implement & output setting & trainset setting
 
-# In[2]:
+# In[ ]:
 
 
 # setting of output files
@@ -65,7 +65,7 @@ first_stage_lstm_hyper_param = "-kS_hyper"
 second_stage_lstm_hyper_param = "-kS_hyper"
 
 
-# In[3]:
+# In[ ]:
 
 
 # data loading & implement setting
@@ -104,7 +104,7 @@ res_dir.mkdir(parents=True, exist_ok=True)
 
 # ## Load or Create Correlation Data
 
-# In[4]:
+# In[ ]:
 
 
 data_length = int(len(dataset_df)/data_gen_cfg["CORR_WINDOW"])*data_gen_cfg["CORR_WINDOW"]
@@ -122,106 +122,106 @@ else:
     corr_datasets = data_generation.gen_train_data(items_implement, raw_data_df=dataset_df, corr_df_paths=all_corr_df_paths, corr_ser_len_max=corr_ser_len_max, save_file=save_corr_data)
 
 
-# # LSTM model for first stage prediciton
+## # LSTM model for first stage prediciton
+#
+## ## settings of input data of first stage LSTM
+#
+## In[ ]:
+#
+#
+#first_stage_lstm_X_len = corr_datasets[0].shape[1]-1
+#first_stage_lstm_Y_len = corr_datasets[0].shape[1]
+#first_stage_lstm_train_X = corr_datasets[0].iloc[::, :first_stage_lstm_X_len].values.reshape(-1, first_stage_lstm_X_len, 1)
+#first_stage_lstm_train_Y = corr_datasets[0].values.reshape(-1, first_stage_lstm_Y_len, 1)
+#first_stage_lstm_dev_X = corr_datasets[1].iloc[::, :first_stage_lstm_X_len].values.reshape(-1, first_stage_lstm_X_len, 1)
+#first_stage_lstm_dev_Y = corr_datasets[1].values.reshape(-1, first_stage_lstm_Y_len, 1)
+#
+#
+## ## settings of first stage LSTM
+#
+## In[ ]:
+#
+#
+#first_stage_lstm_model_log = TensorBoard(log_dir=first_stage_lstm_log_dir)
+#first_stage_lstm_model_earlystop = EarlyStopping(patience=500, monitor="val_loss")
+#first_stage_lstm_save_model = ModelCheckpoint(Path(first_stage_lstm_model_dir)/"epoch{epoch}_{val_loss:.5f}.h5",
+#                                             monitor='val_loss', verbose=1, mode='min', save_best_only=False)
+#first_stage_lstm_callbacks_list = [first_stage_lstm_model_log, first_stage_lstm_model_earlystop, first_stage_lstm_save_model]
+#first_stage_lstm_max_epoch = 5000
+#first_stage_lstm_batch_size = 64
+#first_stage_lstm_metrics = ['mse', 'mae']
+#
+#if first_stage_lstm_hyper_param == "-kS_hyper":
+#    lstm_layer = LSTM(units=10, kernel_regularizer=l1_l2(0.2, 0.0), bias_regularizer=l1_l2(0.2, 0.0), activation="tanh", dropout=0.1, name=f"lstm{first_stage_lstm_hyper_param}")  # LSTM hyper params from 【Something Old, Something New — A Hybrid Approach with ARIMA and LSTM to Increase Portfolio Stability】
+#
+#
+## In[ ]:
+#
+#
+#def double_tanh(x):
+#    return (tf.math.tanh(x) *2)
+#
+#
+#def build_first_stage_lstm():
+#    inputs = Input(shape=(20, 1))
+#    lstm_1 = lstm_layer(inputs)
+#    outputs = Dense(units=21, activation=double_tanh)(lstm_1)
+#    return keras.Model(inputs, outputs, name=f"lstm_lstm_first_stage-lstm1_fc1{first_stage_lstm_hyper_param}")
+#
+#
+## inputs = Input(shape=(20, 1))
+## lstm_1 = LSTM(units=20, kernel_regularizer=l1_l2(0.0, 0.0), bias_regularizer=l1_l2(0.0, 0.0))(inputs)
+## outputs = Dense(units=21, activation="relu")(lstm_1)
+## first_stage_lstm_model = keras.Model(inputs, outputs, name="first_stage_lstm")
+#
+#lstm_lstm_1st_stage_model = build_first_stage_lstm()
+#lstm_lstm_1st_stage_model.summary()
+#lstm_lstm_1st_stage_model.compile(loss='mean_squared_error', optimizer='adam', metrics=first_stage_lstm_metrics )
+#train_history = lstm_lstm_1st_stage_model.fit(x=first_stage_lstm_train_X, y=first_stage_lstm_train_Y, validation_data=(first_stage_lstm_dev_X, first_stage_lstm_dev_Y), epochs=first_stage_lstm_max_epoch, batch_size=first_stage_lstm_batch_size, callbacks=first_stage_lstm_callbacks_list, shuffle=True, verbose=1)
+#best_epoch_num = np.argmin(np.array(train_history.history['val_loss'])) + 1
+#best_val_loss = train_history.history['val_loss'][best_epoch_num-1]
+#best_first_stage_lstm_weight_path = first_stage_lstm_model_dir/f"epoch{best_epoch_num}_{best_val_loss:.5f}.h5"
+#logging.info(f"The best first stage lstm weight is: epoch{best_epoch_num}_{best_val_loss:.5f}.h5")
+#
+#
+## In[ ]:
+#
+#
+#def first_stage_lstm_model(lstm_weight_path: "pathlib.PosixPath", dataset: "pd.DataFrame", first_stage_lstm_result_path_basis: "pathlib.PosixPath", data_split_setting: str = "", save_file: bool = False) -> ("pd.DataFrame", "pd.DataFrame", "pd.DataFrame"):
+#    best_first_stage_lstm_model = load_model(lstm_weight_path, custom_objects={'double_tanh':double_tanh})
+#    pred_input_len = dataset.shape[1]-1
+#    pred_input = dataset.iloc[::, :pred_input_len].values.reshape(-1, pred_input_len, 1)
+#    dataset.columns = pd.RangeIndex(dataset.shape[1])  # in order to align dataset & first_stage_lstm_output_df
+#    fisrt_stage_lstm_pred = best_first_stage_lstm_model.predict(pred_input)
+#    first_stage_lstm_output_df = pd.DataFrame(fisrt_stage_lstm_pred, index=dataset.index)
+#    first_stage_lstm_resid_df = dataset - first_stage_lstm_output_df
+#
+#    if save_file:
+#        first_stage_lstm_output_df.to_csv(first_stage_lstm_result_path_basis.parent/(str(first_stage_lstm_result_path_basis.stem) + f'-first_stage_lstm_output{data_split_setting}.csv'))
+#        first_stage_lstm_resid_df.to_csv(first_stage_lstm_result_path_basis.parent/(str(first_stage_lstm_result_path_basis.stem) + f'-first_stage_lstm_resid{data_split_setting}.csv'))
+#
+#    return first_stage_lstm_output_df, first_stage_lstm_resid_df
+#
+#first_stage_lstm_result_path_basis = first_stage_lstm_result_dir/f'{output_file_name}.csv'
+#first_stage_lstm_result_paths = []
+#first_stage_lstm_result_types = ["-first_stage_lstm_output", "-first_stage_lstm_resid"]
+#
+#for data_sp_setting in data_split_settings:
+#    for first_stage_lstm_result_type in first_stage_lstm_result_types:
+#        first_stage_lstm_result_paths.append(first_stage_lstm_result_dir/f'{output_file_name}{first_stage_lstm_result_type}{data_sp_setting}.csv')
+#
+#if all([df_path.exists() for df_path in first_stage_lstm_result_paths]):
+#    pass
+#else:
+#    for (data_sp_setting, dataset) in tqdm(zip(data_split_settings, corr_datasets)):
+#         first_stage_lstm_model(best_first_stage_lstm_weight_path, dataset, first_stage_lstm_result_path_basis=first_stage_lstm_result_path_basis, data_split_setting=data_sp_setting, save_file=save_lstm_resid_data)
+#
 
-# ## settings of input data of first stage LSTM
-
-# In[5]:
-
-
-first_stage_lstm_X_len = corr_datasets[0].shape[1]-1
-first_stage_lstm_Y_len = corr_datasets[0].shape[1]
-first_stage_lstm_train_X = corr_datasets[0].iloc[::, :first_stage_lstm_X_len].values.reshape(-1, first_stage_lstm_X_len, 1)
-first_stage_lstm_train_Y = corr_datasets[0].values.reshape(-1, first_stage_lstm_Y_len, 1)
-first_stage_lstm_dev_X = corr_datasets[1].iloc[::, :first_stage_lstm_X_len].values.reshape(-1, first_stage_lstm_X_len, 1)
-first_stage_lstm_dev_Y = corr_datasets[1].values.reshape(-1, first_stage_lstm_Y_len, 1)
-
-
-# ## settings of first stage LSTM
-
-# In[6]:
-
-
-first_stage_lstm_model_log = TensorBoard(log_dir=first_stage_lstm_log_dir)
-first_stage_lstm_model_earlystop = EarlyStopping(patience=500, monitor="val_loss")
-first_stage_lstm_save_model = ModelCheckpoint(Path(first_stage_lstm_model_dir)/"epoch{epoch}_{val_loss:.5f}.h5",
-                                             monitor='val_loss', verbose=1, mode='min', save_best_only=False)
-first_stage_lstm_callbacks_list = [first_stage_lstm_model_log, first_stage_lstm_model_earlystop, first_stage_lstm_save_model]
-first_stage_lstm_max_epoch = 5000
-first_stage_lstm_batch_size = 64
-first_stage_lstm_metrics = ['mse', 'mae']
-
-if first_stage_lstm_hyper_param == "-kS_hyper":
-    lstm_layer = LSTM(units=10, kernel_regularizer=l1_l2(0.2, 0.0), bias_regularizer=l1_l2(0.2, 0.0), activation="tanh", dropout=0.1, name=f"lstm{first_stage_lstm_hyper_param}")  # LSTM hyper params from 【Something Old, Something New — A Hybrid Approach with ARIMA and LSTM to Increase Portfolio Stability】
-
-
-# In[7]:
-
-
-def double_tanh(x):
-    return (tf.math.tanh(x) *2)
-
-
-def build_first_stage_lstm():
-    inputs = Input(shape=(20, 1))
-    lstm_1 = lstm_layer(inputs)
-    outputs = Dense(units=21, activation=double_tanh)(lstm_1)
-    return keras.Model(inputs, outputs, name=f"lstm_lstm_first_stage-lstm1_fc1{first_stage_lstm_hyper_param}")
-
-
-# inputs = Input(shape=(20, 1))
-# lstm_1 = LSTM(units=20, kernel_regularizer=l1_l2(0.0, 0.0), bias_regularizer=l1_l2(0.0, 0.0))(inputs)
-# outputs = Dense(units=21, activation="relu")(lstm_1)
-# first_stage_lstm_model = keras.Model(inputs, outputs, name="first_stage_lstm")
-
-lstm_lstm_1st_stage_model = build_first_stage_lstm()
-lstm_lstm_1st_stage_model.summary()
-lstm_lstm_1st_stage_model.compile(loss='mean_squared_error', optimizer='adam', metrics=first_stage_lstm_metrics )
-train_history = lstm_lstm_1st_stage_model.fit(x=first_stage_lstm_train_X, y=first_stage_lstm_train_Y, validation_data=(first_stage_lstm_dev_X, first_stage_lstm_dev_Y), epochs=first_stage_lstm_max_epoch, batch_size=first_stage_lstm_batch_size, callbacks=first_stage_lstm_callbacks_list, shuffle=True, verbose=1)
-best_epoch_num = np.argmin(np.array(train_history.history['val_loss'])) + 1
-best_val_loss = train_history.history['val_loss'][best_epoch_num-1]
-best_first_stage_lstm_weight_path = first_stage_lstm_model_dir/f"epoch{best_epoch_num}_{best_val_loss:.5f}.h5"
-logging.info(f"The best first stage lstm weight is: epoch_{best_epoch_num}_{best_val_loss:.5f}.h5")
-
-
-# In[8]:
-
-
-def first_stage_lstm_model(lstm_weight_path: "pathlib.PosixPath", dataset: "pd.DataFrame", first_stage_lstm_result_path_basis: "pathlib.PosixPath", data_split_setting: str = "", save_file: bool = False) -> ("pd.DataFrame", "pd.DataFrame", "pd.DataFrame"):
-    best_first_stage_lstm_model = load_model(lstm_weight_path, custom_objects={'double_tanh':double_tanh})
-    pred_input_len = dataset.shape[1]-1
-    pred_input = dataset.iloc[::, :pred_input_len].values.reshape(-1, pred_input_len, 1)
-    dataset.columns = pd.RangeIndex(dataset.shape[1])  # in order to align dataset & first_stage_lstm_output_df
-    fisrt_stage_lstm_pred = best_first_stage_lstm_model.predict(pred_input)
-    first_stage_lstm_output_df = pd.DataFrame(fisrt_stage_lstm_pred, index=dataset.index)
-    first_stage_lstm_resid_df = first_stage_lstm_output_df
-
-    if save_file:
-        first_stage_lstm_output_df.to_csv(first_stage_lstm_result_path_basis.parent/(str(first_stage_lstm_result_path_basis.stem) + f'-first_stage_lstm_output{data_split_setting}.csv'))
-        first_stage_lstm_resid_df.to_csv(first_stage_lstm_result_path_basis.parent/(str(first_stage_lstm_result_path_basis.stem) + f'-first_stage_lstm_resid{data_split_setting}.csv'))
-
-    return first_stage_lstm_output_df, first_stage_lstm_resid_df
-
-first_stage_lstm_result_path_basis = first_stage_lstm_result_dir/f'{output_file_name}.csv'
-first_stage_lstm_result_paths = []
-first_stage_lstm_result_types = ["-first_stage_lstm_output", "-first_stage_lstm_resid"]
-
-for data_sp_setting in data_split_settings:
-    for first_stage_lstm_result_type in first_stage_lstm_result_types:
-        first_stage_lstm_result_paths.append(first_stage_lstm_result_dir/f'{output_file_name}{first_stage_lstm_result_type}{data_sp_setting}.csv')
-
-if all([df_path.exists() for df_path in first_stage_lstm_result_paths]):
-    pass
-else:
-    for (data_sp_setting, dataset) in tqdm(zip(data_split_settings, corr_datasets)):
-         first_stage_lstm_model(best_first_stage_lstm_weight_path, dataset, first_stage_lstm_result_path_basis=first_stage_lstm_result_path_basis, data_split_setting=data_sp_setting, save_file=save_lstm_resid_data)
-
-
-# # LSTM for residual
+# # LSTM for second stage prediction (for residual)
 
 # ## settings of input data of second stage LSTM
 
-# In[9]:
+# In[ ]:
 
 
 # Dataset.from_tensor_slices(dict(pd.read_csv(f'./dataset/after_arima/arima_resid_train.csv')))
@@ -234,8 +234,6 @@ second_stage_lstm_test1_Y = pd.read_csv(first_stage_lstm_result_dir/f'{output_fi
 second_stage_lstm_test2_X = pd.read_csv(first_stage_lstm_result_dir/f'{output_file_name}-first_stage_lstm_resid-data_sp_test2.csv', index_col=["items"]).iloc[::, :-1]
 second_stage_lstm_test2_Y = pd.read_csv(first_stage_lstm_result_dir/f'{output_file_name}-first_stage_lstm_resid-data_sp_test2.csv', index_col=["items"]).iloc[::, -1]
 
-
-print(second_stage_lstm_train_X.shape,  second_stage_lstm_train_Y.shape)
 second_stage_lstm_X_len = second_stage_lstm_train_X.shape[1]
 second_stage_lstm_Y_len = second_stage_lstm_train_Y.shape[1] if len(second_stage_lstm_train_Y.shape)>1 else 1
 second_stage_lstm_train_X = second_stage_lstm_train_X.values.reshape(-1, second_stage_lstm_X_len, 1)
@@ -250,7 +248,7 @@ second_stage_lstm_test2_Y = second_stage_lstm_test2_Y.values.reshape(-1, second_
 
 # ## settings of second stage LSTM
 
-# In[17]:
+# In[ ]:
 
 
 second_stage_lstm_model_log = TensorBoard(log_dir=second_stage_lstm_log_dir)
@@ -262,7 +260,7 @@ if second_stage_lstm_hyper_param == "-kS_hyper":
     lstm_layer = LSTM(units=10, kernel_regularizer=l1_l2(0.2, 0.0), bias_regularizer=l1_l2(0.2, 0.0), activation="tanh", dropout=0.1, name=f"lstm{second_stage_lstm_hyper_param}")  # LSTM hyper params from 【Something Old, Something New — A Hybrid Approach with ARIMA and LSTM to Increase Portfolio Stability】
 
 
-# In[11]:
+# In[ ]:
 
 
 def double_tanh(x):
@@ -280,7 +278,7 @@ lstm_model.summary()
 lstm_model.compile(loss='mean_squared_error', optimizer='adam', metrics=second_stage_lstm_metrics)
 
 
-# In[13]:
+# In[ ]:
 
 
 res_csv_path = res_dir/f'{output_file_name}{second_stage_lstm_hyper_param}-second_stage_lstm_evaluation.csv'
@@ -290,7 +288,7 @@ with open(res_csv_path, 'r+') as f:
         f.write("epoch,TRAIN_MSE,DEV_MSE,TEST1_MSE,TEST2_MSE,TRAIN_MAE,DEV_MAE,TEST1_MAE,TEST2_MAE")
 
 res_df = pd.read_csv(res_csv_path)
-saved_model_list = [int(p.stem.split('_')[1]) for p in second_stage_lstm_model_dir.glob('*.h5')]
+saved_model_list = [int(p.stem[p.stem.find("epoch")+len("epoch"):]) for p in  second_stage_lstm_model_dir.glob('*.h5')]
 epoch_start = max(saved_model_list) if saved_model_list else 1
 
 try:
@@ -333,4 +331,3 @@ else:
     pass
 finally:
     res_df.to_csv(res_csv_path, index=False)
-

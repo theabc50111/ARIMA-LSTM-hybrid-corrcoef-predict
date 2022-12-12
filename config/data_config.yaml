@@ -159,11 +159,13 @@ ARIMA_LSTM_LSTM_WEIGHT:
 LSTM_LSTM_LSTM_WEIGHT:
     FIRST_STAGE_LSTM:
         SP500_20082017_KS_HYPER_FIRST_STAGE_LSTM:
-            FILE_PATH: "{DIRS.LSTM_LSTM_LSTM_WEIGHT_DIR}/first_stage_lstm_weight/20221129/epoch1140_0.11602.h5"
+            # FILE_PATH: "{DIRS.LSTM_LSTM_LSTM_WEIGHT_DIR}/first_stage_lstm_weight/20221129/epoch1140_0.11602.h5"  # wrong
+            FILE_PATH: "{DIRS.LSTM_LSTM_LSTM_WEIGHT_DIR}/first_stage_lstm_weight/20221212/epoch825_0.11406.h5"
             LSTM_WEIGHT_NAME: "-sp500_20082017_kS_hyper_first_stage_lstm"
     SECOND_STAGE_LSTM:
         SP500_20082017_KS_HYPER_SECOND_STAGE_LSTM:
-            FILE_PATH: "{DIRS.LSTM_LSTM_LSTM_WEIGHT_DIR}/second_stage_lstm_weight/20221129/sp500_20082017-train_train-kS_hyper-epoch1140.h5"
+            # FILE_PATH: "{DIRS.LSTM_LSTM_LSTM_WEIGHT_DIR}/second_stage_lstm_weight/20221129/sp500_20082017-train_train-kS_hyper-epoch1140.h5"  # wrong
+            FILE_PATH: "{DIRS.LSTM_LSTM_LSTM_WEIGHT_DIR}/second_stage_lstm_weight/20221212/sp500_20082017-train_train-kS_hyper-epoch3289.h5"
             LSTM_WEIGHT_NAME: "-sp500_20082017_kS_hyper_second_stage_lstm"
 
 
