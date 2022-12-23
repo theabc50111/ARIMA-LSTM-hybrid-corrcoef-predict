@@ -62,8 +62,8 @@ logging.debug(pformat(data_cfg, indent=1, width=100, compact=True))
 # ## Data implement & output setting & testset setting
 
 
-test_datasets = ['SP500_20082017_FREQ_CLUSTER_LABEL_1']
-test_lstm_weights = ['SP500_20082017_RAND_66_KS_HYPER_LSTM', 'SP500_20082017_FREQ_CLUSTER_LABEL_1_KS_HYPER_LSTM', 'SP500_20082017_TEST_5000_EPOCH_KS_HYPER_LSTM', 'SP500_20082017_KS_HYPER_LSTM']
+test_datasets = ['SP500_20082017_CORR_SER_ABS_CORR_MAT_HRCHY_11_CLUSTER']
+test_lstm_weights = ['SP500_20082017_CORR_SER_ABS_CORR_MAT_HRCHY_11_CLUSTER_KS_HYPER_LSTM', 'SP500_20082017_RAND_66_KS_HYPER_LSTM', 'SP500_20082017_TEST_5000_EPOCH_KS_HYPER_LSTM', 'SP500_20082017_KS_HYPER_LSTM']
 
 for data_imp, lstm_weight_set in product(test_datasets, test_lstm_weights):
     # setting of output files

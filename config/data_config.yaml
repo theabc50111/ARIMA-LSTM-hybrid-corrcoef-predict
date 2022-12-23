@@ -146,7 +146,8 @@ ARIMA_LSTM_LSTM_WEIGHT:
         FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221129/sp500_20082017_corr_ser_abs_hrchy_12_cluster-train_train-kS_hyper-epoch4981.h5"  # same hyper-params of clustering & same clustering results
         LSTM_WEIGHT_NAME: "-sp500_20082017_corr_ser_abs_hrchy_12_cluster_kS_hyper_lstm"
     SP500_20082017_CORR_SER_ABS_CORR_MAT_HRCHY_11_CLUSTER_KS_HYPER_LSTM:
-        FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221126/sp500_20082017_corr_ser_abs_corr_mat_hrchy_11_cluster-train_train-kS_hyper-epoch2967.h5"
+        # FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221126/sp500_20082017_corr_ser_abs_corr_mat_hrchy_11_cluster-train_train-kS_hyper-epoch2967.h5"
+        FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221207/sp500_20082017_corr_ser_abs_corr_mat_hrchy_11_cluster-train_train-kS_hyper-epoch3088.h5"
         LSTM_WEIGHT_NAME: "-sp500_20082017_corr_ser_abs_corr_mat_hrchy_11_cluster_kS_hyper_lstm"
     SP500_20082017_CORR_SER_REG_CORR_MAT_HRCHY_11_CLUSTER_KS_HYPER_LSTM:
         # FILE_PATH: "{DIRS.ARIMA_LSTM_LSTM_WEIGHT_DIR}/20221205/sp500_20082017_corr_ser_reg_corr_mat_hrchy_11_cluster-train_train-kS_hyper-epoch3557.h5"
@@ -158,11 +159,13 @@ ARIMA_LSTM_LSTM_WEIGHT:
 LSTM_LSTM_LSTM_WEIGHT:
     FIRST_STAGE_LSTM:
         SP500_20082017_KS_HYPER_FIRST_STAGE_LSTM:
-            FILE_PATH: "{DIRS.LSTM_LSTM_LSTM_WEIGHT_DIR}/first_stage_lstm_weight/20221129/epoch1140_0.11602.h5"
+            # FILE_PATH: "{DIRS.LSTM_LSTM_LSTM_WEIGHT_DIR}/first_stage_lstm_weight/20221129/epoch1140_0.11602.h5"  # wrong
+            FILE_PATH: "{DIRS.LSTM_LSTM_LSTM_WEIGHT_DIR}/first_stage_lstm_weight/20221212/epoch825_0.11406.h5"
             LSTM_WEIGHT_NAME: "-sp500_20082017_kS_hyper_first_stage_lstm"
     SECOND_STAGE_LSTM:
         SP500_20082017_KS_HYPER_SECOND_STAGE_LSTM:
-            FILE_PATH: "{DIRS.LSTM_LSTM_LSTM_WEIGHT_DIR}/second_stage_lstm_weight/20221129/sp500_20082017-train_train-kS_hyper-epoch1140.h5"
+            # FILE_PATH: "{DIRS.LSTM_LSTM_LSTM_WEIGHT_DIR}/second_stage_lstm_weight/20221129/sp500_20082017-train_train-kS_hyper-epoch1140.h5"  # wrong
+            FILE_PATH: "{DIRS.LSTM_LSTM_LSTM_WEIGHT_DIR}/second_stage_lstm_weight/20221212/sp500_20082017-train_train-kS_hyper-epoch3289.h5"
             LSTM_WEIGHT_NAME: "-sp500_20082017_kS_hyper_second_stage_lstm"
 
 
